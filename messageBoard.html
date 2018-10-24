@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>留言板功能</title>
+		<script src="../../js/vue.js"></script>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<script src="../../js/jquery-1.10.2.js"></script>
+		<script src="../../js/bootstrap.js"></script>
+		<link rel="stylesheet" href="../../css/bootstrap.css">
+		<style>
+			#app {
+				
+				max-width: 50%;
+				margin:1% 25%;
+			}
+			h3{
+				display: inline-block;
+				margin-top: 5px;
+			}
+			hr {
+				border: 1px dashed #ccc;
+			}
+			ul{
+				padding: 0;
+			}
+			ul li {
+				list-style: none;
+				margin-top: 3px;
+				margin-bottom: 3px;
+				padding: 2px 10px;
+			}
+			
+			ul li>hr {
+				margin-top: 3px;
+				margin-bottom: 0;
+			}
+			
+			#messagearea {
+				border: 1px dashed #31B0D5;
+				border-radius: 3px;
+			}
+			
+			.btn-default.delete,.btn-default.deleteAll{
+				float: right;
+				
+			}
+			.message{
+				display: inline-block;
+				margin: 5px 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<form role="form">
+				<div class="form-group">
+					<textarea v-model="msg" cols="15" class="form-control" rows="6"></textarea>
+					<button class="btn btn-default" @click.prevent="add">提交</button>
+				</div>
+			</form>
+			<hr/>
+			<h3>留言板</h3><span>/共计{{sum}}条留言</span><button class="btn btn-default deleteAll" @click="removeAll">删除全部留言</button>
+			<div id="messagearea" v-if="myData.length>0">				
+				<ul>
+					<li v-for="(val,index) in myData">
+						<div>
+							<strong class="message">{{val}}</strong><button class="btn btn-default delete" @click="remove(index)">删除</button><br>
+						</div>	
+						<span class="date">时间------{{new Date()|dateFormat}}</span>						
+						<hr/>
+					</li>
+				</ul>
+			</div>
+
+		</div>
+		<script>
+			window.onload = function() {
+				var vm = new Vue({
+					el: "#app",
+					data: {
+						msg: "",
+						myData: ["我是第一条留言"],
+					},
+					methods: {
+						add() {
+							this.myData.unshift(this.msg);
+							//sum++;
+							this.msg = "";
+						},
+						remove(index){
+							this.myData.splice(index,1)
+							//sum--;
+						},
+						removeAll(){
+							this.myData.splice(0,this.myData.length)
+						}
+					},
+					computed:{
+						sum(){
+							return this.myData.length;
+						}
+					},
+					filters: {
+						dateFormat(date) {
+							var d = new Date(date);
+							var year = d.getFullYear();
+							var month = d.getMonth() + 1;
+							var day = d.getDate() < 10 ? '0' + d.getDate() : '' + d.getDate();
+							var hour = d.getHours();
+							var minutes = d.getMinutes();
+							var seconds = d.getSeconds();
+							return year + '-' + month + '-' + day + ' ' + hour + ':' + minutes + ':' + seconds;
+						}
+					}
+
+				})
+			}
+		</script>
+	</body>
+
+</html>
