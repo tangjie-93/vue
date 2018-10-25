@@ -7,6 +7,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
 		<script type="text/javascript" src="js/jquery-3.2.1.js"></script>
+		<script src="js/commonMethod.js"></script>
 		<link rel="stylesheet" href="css/bootstrap.css" />
 		<style>
 			h5 {
@@ -151,52 +152,6 @@
 				<ul>
 					<li>
 						<select id="address" class="form-control">
-							<option value="sdkj">山东科技大学</option>
-							<option value="zgsyhb">中国石油大学（华东）</option>
-							<option value="zghy">中国海洋大学</option>
-							<option value="sdjz">山东建筑大学</option>
-							<option value="sdjt">山东交通大学</option>
-							<option value="tjcj">天津城建大学</option>
-							<option value="hblg">华北理工大学</option>
-							<option value="bjjz">北京建筑大学</option>
-							<option value="hbkj">华北科技学院</option>
-							<option value="hebgc">哈尔滨工程大学</option>
-							<option value="gldzkj">桂林电子科技大学</option>
-							<option value="guillg">桂林理工大学</option>
-							<option value="zn">中南大学</option>
-							<option value="cslg">长沙理工大学</option>
-							<option value="znlikj">中南林业科技大学</option>
-							<option value="hnkj">湖南科技大学</option>
-							<option value="dhlg">东华理工大学</option>
-							<option value="ncgc">南昌工程学院</option>
-							<option value="jxlg">江西理工大学</option>
-							<option value="gnsf">赣南师范大学</option>
-							<option value="kmlg">昆明理工大学</option>
-							<option value="xnly">西南林业大学</option>
-							<option value="guiz">贵州大学</option>
-							<option value="gzsf">贵州师范大学</option>
-							<option value="xnjt">西南交通大学</option>
-							<option value="xnsy">西南石油大学</option>
-							<option value="cdlg">成都理工大学</option>
-							<option value="gsny">甘肃农业大学</option>
-							<option value="lzjtbw">兰州交通大学博文学院</option>
-							<option value="lzlgjsgc">兰州理工大学技术工程学院</option>
-							<option value="wh">武汉大学</option>
-							<option value="zgdz">中国地质大学</option>
-							<option value="zgky">中国矿业大学</option>
-							<option value="njsf">南京师范大学</option>
-							<option value="njxxgc">南京信息工程大学</option>
-							<option value="njgy">南京工业大学</option>
-							<option value="hnsf">华南师范大学</option>
-							<option value="gdgy">广东工业大学</option>
-							<option value="gz">广州大学</option>
-							<option value="ca">长安大学</option>
-							<option value="sxkj">西安科技大学</option>
-							<option value="tylg">太原理工大学</option>
-							<option value="sxgnjs">山西工程技术学院</option>
-							<option value="hnlg">河南理工大学</option>
-							<option value="hhslzyjs">黄河水利职业技术学院</option>
-							<option value="zzslsd">郑州水利水电大学</option>
 						</select>
 					</li>
 					<li>
@@ -235,6 +190,7 @@
 						<td>操作</td>
 					</tr>
 				</thead>
+				<tbody></tbody>
 			</table>
 			<div class="page">
 				<select id="pageNumber" class="form-control">
@@ -252,7 +208,6 @@
 			</div>
 			<div id="mask"></div>
 			<div id="pop">
-
 				<ul>
 					<li class="userName"><span>姓名:</span><input id="userName" type="text" class="form-control" /></li>
 					<li class="major"><span>专业:</span><input id="major" type="text" class="form-control" /></li>
@@ -280,14 +235,17 @@
 			var address;
 			var url;
 			$(function() {
-				//初始化
-				getData()
+				//初始化学校数据
+				initOption();
+				//首次默认查询数据
+
+				//查询数据
 				$("#query").click(function() {
 					getData();
 				})
 				//导出excel
 				$("#output").click(function() {
-					method5("userInfos");
+					exportExcel("userInfos");
 				});
 				//点击首页
 				$(".first").click(function() {
@@ -387,7 +345,8 @@
 						$(".first").addClass("highlight");
 						$(".prev").addClass("highlight");
 					}
-				})
+				});
+				//页面显示数据数
 				$("#pageNumber").change(function() {
 					pageNumber = parseInt($(this).val());
 					endIndex = pageNumber;
@@ -408,8 +367,21 @@
 
 			})
 
+			function initOption() {
+				$.get("data/school.json", function(result, textStatus, jqXHR) {
+					if(textStatus === "success") {
+						for(var i = 0; i < result.length; i++) {
+							$("<option/>").text(result[i].name).val(result[i].alias).appendTo($("#address"));
+						}
+					    getData();
+					} else {
+						alert("您访问的文件不存在");
+					}
+				})
+			}
+			//获取数据
 			function getData() {
-				$("#userInfos").children("tbody").remove();
+				$("#userInfos>tbody").children().remove();
 				userInfos.splice(0, userInfos.length);
 				address = $("#address").val();
 				var data = {};
@@ -420,25 +392,20 @@
 				$.post(url, {
 					data: address
 				}, function(result, textStatus, jqXHR) {
-					if(textStatus==="success"){
+					if(textStatus === "success") {
 						loadData(result);
-					}else{
+					} else {
 						alert("您读取的文件不存在");
 					}
-
-					
-
 				})
-
 			}
-
-			//
+			//加载数据
 			function loadData(result) {
-				if(result.length==0) {
+				if(result.length == 0) {
 					alert("您读取的文件暂无数据");
 					$(".total").text("一共0条数据");
 					var tr = $("<tr><td colspan='8'>暂无数据</td></tr>")
-					$("#userInfos").append(tr);
+					$("#userInfos>tbody").append(tr);
 				} else if(result.length > 0) {
 
 					for(var i = 0; i < result.length; i++) {
@@ -464,50 +431,35 @@
 				} else {
 					$(".total").text("一共0条数据");
 					var tr = $("<tr><td colspan='8'>暂无数据</td></tr>")
-					$("#userInfos").append(tr);
+					$("#userInfos>tbody").append(tr);
 				}
 			}
 
 			function pageClick(startIndex, endIndex) {
 				//清空数据
-				$("#userInfos").children("tbody").remove();
+				$("#userInfos>tbody").children().remove();
 				endIndex = endIndex > length ? length : endIndex;
-				$tbody = $("<tbody/>");
-				$("#userInfos").append($tbody);
+				$tbody = $("#userInfos").children("tbody");
 				for(var j = startIndex; j < endIndex; j++) {
 					var userInfo = userInfos[j];
-					console.log(userInfo);
-					var tr = $("<tr></tr>"); //$("<tr/>")
-					var td0 = $("<td></td>");
-					$(td0).text(j + 1);
-					var td1 = $("<td></td>");
-					$(td1).text(userInfo.userName);
-					var td2 = $("<td></td>");
-					$(td2).text(userInfo.major);
-					var td3 = $("<td></td>");
-					$(td3).text(userInfo.school);
-					var td4 = $("<td></td>");
-					$(td4).text(userInfo.telephone);
-					var td5 = $("<td></td>");
+
+					var tr = $("<tr/>");
+					$("<td/>").text(j + 1).appendTo($(tr));
+					$("<td/>").text(userInfo.userName).appendTo($(tr));
+					$("<td/>").text(userInfo.major).appendTo($(tr));
+					$("<td/>").text(userInfo.school).appendTo($(tr));
+					$("<td/>").text(userInfo.telephone).appendTo($(tr));
 					var bool = userInfo.onlineApply === "on" ? "是" : "否";
-					$(td5).text(bool);
-					var td6 = $("<td></td>");
-					$(td6).text(userInfo.time);
-					var td7 = $("<td class='operate'></td>");
+					$("<td/>").text(bool).appendTo($(tr));
+
+					$("<td/>").text(userInfo.time).appendTo($(tr));
+					var td = $("<td class='operate'></td>");
 					var delbtn = $("<button class='btn delete'>删除</button>");
 					var updbtn = $("<button class='btn update'>修改</button>");
-					$(td7).append(delbtn).append(updbtn);
-					$(tr).append(td0);
-					$(tr).append(td1);
-					$(tr).append(td2);
-					$(tr).append(td3);
-					$(tr).append(td4);
-					$(tr).append(td5);
-					$(tr).append(td6);
-					$(tr).append(td7);
+					$(td).append(delbtn).append(updbtn).appendTo($(tr));;
 					$tbody.append(tr);
 				}
-				$(".delete").click(function() {
+				$(".delete").off("click").on("click", function() {
 					console.log(userInfos);
 					var index = 10 * (pageIndex - 1) + $(this).parents("tr").index();
 					var data = {};
@@ -521,10 +473,9 @@
 						function(result, textStatus, jqXHR) {
 							if(result === true) {
 								alert("删除成功");
-							    getData();
-								
-							}
-							else{
+								getData();
+
+							} else {
 								alert("删除失败")
 							}
 
@@ -532,7 +483,7 @@
 					)
 					return false;
 				});
-				$(".update").click(function() {
+				$(".update").off("click").on("click", function() {
 					$("#mask").show();
 					$("#pop").show();
 					var index = 10 * (pageIndex - 1) + $(this).parents("tr").index();
@@ -555,12 +506,12 @@
 					$("#pop").css("margin-top", -parseInt(height / 2));
 					$("#pop").css("margin-left", -parseInt(width / 2));
 
-					$(".cancel").click(function() {
+					$(".cancel").off("click").on("click", function() {
 						$("#pop").hide();
 						$("#mask").hide();
 						return false;
 					})
-					$(".ok").click(function() {
+					$(".ok").off("click").on("click", function() {
 						var data = {};
 						data["address"] = $("#address").val();;
 						data["index"] = index;
@@ -574,7 +525,7 @@
 						}
 						userInfo["telephone"] = $("#telephone").val();
 
-						userInfo["onlineApply"] = $("#onlineApply").val();
+						userInfo["onlineApply"] = $("input[name='onlineApply']:checked").val();
 						userInfo["address"] = $("#address").val();
 						var time = new Date().Formate("yyyy-MM-dd HH:mm:ss");
 						userInfo["time"] = time;
@@ -591,10 +542,10 @@
 									$("#pop").hide();
 									$("#mask").hide();
 									getData()
-								}else{
-									alert(result+"更新失败")
+								} else {
+									alert(result + "更新失败")
 								}
-								
+
 							}
 						)
 						return false;
@@ -604,139 +555,6 @@
 				});
 
 			}
-			//获取网站根路径
-			function getRootPath_web() {
-				//获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp
-				var curWwwPath = window.document.location.href;
-				//获取主机地址之后的目录，如： uimcardprj/share/meun.jsp
-				var pathName = window.document.location.pathname;
-				var pos = curWwwPath.indexOf(pathName);
-				//获取主机地址，如： http://localhost:8083
-				var localhostPaht = curWwwPath.substring(0, pos);
-
-				return localhostPaht;
-			}
-			//判断文件是否存在
-			function fileExist(url) {
-				var isExists;
-				$.ajax({
-					url: url,
-					async: false,
-					error: function() {
-						isExists = false;
-
-					},
-					success: function() {
-						isExists = true;
-
-					}
-				})
-				return isExists;
-
-			}
-			//时间格式化函数
-			Date.prototype.Formate = function(fmt) {
-				var o = {
-					"M+": this.getMonth() + 1, //月份
-					"d+": this.getDate(), //日
-					"H+": this.getHours(), //小时
-					"m+": this.getMinutes(), //分
-					"s+": this.getSeconds(), //秒
-					"q+": Math.floor((this.getMonth() + 3) / 3), //季度
-					"S": this.getMilliseconds() //毫秒
-				};
-				if(/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-				for(var k in o)
-					if(new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-				return fmt;
-			};
-			//第五种方法  
-			var idTmr;
-
-			function getExplorer() {
-				var explorer = window.navigator.userAgent;
-				//ie  
-				if(explorer.indexOf("MSIE") >= 0) {
-					return 'ie';
-				}
-				//firefox  
-				else if(explorer.indexOf("Firefox") >= 0) {
-					return 'Firefox';
-				}
-				//Chrome  
-				else if(explorer.indexOf("Chrome") >= 0) {
-					return 'Chrome';
-				}
-				//Opera  
-				else if(explorer.indexOf("Opera") >= 0) {
-					return 'Opera';
-				}
-				//Safari  
-				else if(explorer.indexOf("Safari") >= 0) {
-					return 'Safari';
-				}
-			}
-
-			function method5(tableid) {
-				if(getExplorer() == 'ie') {
-					var curTbl = document.getElementById(tableid);
-					var oXL = new ActiveXObject("Excel.Application");
-					var oWB = oXL.Workbooks.Add();
-					var xlsheet = oWB.Worksheets(1);
-					var sel = document.body.createTextRange();
-					sel.moveToElementText(curTbl);
-					sel.select();
-					sel.execCommand("Copy");
-					xlsheet.Paste();
-					oXL.Visible = true;
-
-					try {
-						var fname = oXL.Application.GetSaveAsFilename("Excel.xls", "Excel Spreadsheets (*.xls), *.xls");
-					} catch(e) {
-						print("Nested catch caught " + e);
-					} finally {
-						oWB.SaveAs(fname);
-						oWB.Close(savechanges = false);
-						oXL.Quit();
-						oXL = null;
-						idTmr = window.setInterval("Cleanup();", 1);
-					}
-
-				} else {
-					tableToExcel(tableid)
-				}
-			}
-
-			function Cleanup() {
-				window.clearInterval(idTmr);
-				CollectGarbage();
-			}
-			var tableToExcel = (function() {
-				var uri = 'data:application/vnd.ms-excel;base64,',
-					template = '<html><head><meta charset="UTF-8"></head><body><table>{table}</table></body></html>',
-					base64 = function(s) {
-						return window.btoa(unescape(encodeURIComponent(s)))
-					},
-					format = function(s, c) {
-						return s.replace(/{(\w+)}/g,
-							function(m, p) {
-								return c[p];
-							})
-					}
-				return function(table, name) {
-					if(!table.nodeType) {
-						table = document.getElementById("userInfos")
-					}
-					var ctx = {
-						worksheet: name || 'Worksheet',
-						table: table.innerHTML
-					}
-
-					document.getElementById("dlink").href = uri + base64(format(template, ctx));
-					document.getElementById("dlink").download = '签到信息表.xls';
-					document.getElementById("dlink").click();
-				}
-			})()
 		</script>
 	</body>
 

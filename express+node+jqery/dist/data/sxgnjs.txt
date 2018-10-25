@@ -1,1 +1,0 @@
-{"userName":"1","major":"1","school":"11","telephone":"1","onlineApply":"true","address":"山西工程技术学院","time":"2018-09-08 22:21:12"}|

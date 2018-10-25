@@ -7,6 +7,7 @@
 		<meta http-equiv="X-UA-Compatible" content="ie=edge">
 		<link rel="stylesheet" href="css/bootstrap.css" />
 		<script type="text/javascript" src="js/jquery-3.2.1.js"></script>
+		<script src="js/commonMethod.js"></script>
 		<title>签到表</title>
 		<style type="text/css">
 			h4 {
@@ -142,52 +143,7 @@
 			<li>
 				<span>宣讲地址:</span>
 				<select id="address" class="form-control">
-					<option value="山东科技大学">山东科技大学</option>
-					<option value="中国石油大学（华东）">中国石油大学（华东）</option>
-					<option value="中国海洋大学">中国海洋大学</option>
-					<option value="山东建筑大学">山东建筑大学</option>
-					<option value="山东交通学院">山东交通学院</option>
-					<option value="天津城建大学">天津城建大学</option>
-					<option value="华北理工大学">华北理工大学</option>
-					<option value="北京建筑大学">北京建筑大学</option>
-					<option value="华北科技学院">华北科技学院</option>
-					<option value="哈尔滨工程大学">哈尔滨工程大学</option>
-					<option value="桂林电子科技大学">桂林电子科技大学</option>
-					<option value="桂林理工大学">桂林理工大学</option>
-					<option value="中南大学">中南大学</option>
-					<option value="长沙理工大学">长沙理工大学</option>
-					<option value="中南林业科技大学">中南林业科技大学</option>
-					<option value="湖南科技大学">湖南科技大学</option>
-					<option value="东华理工大学">东华理工大学</option>
-					<option value="南昌工程学院">南昌工程学院</option>
-					<option value="江西理工大学">江西理工大学</option>
-					<option value="赣南师范大学">赣南师范大学</option>
-					<option value="昆明理工大学">昆明理工大学</option>
-					<option value="西南林业大学">西南林业大学</option>
-					<option value="贵州大学">贵州大学</option>
-					<option value="贵州师范大学">贵州师范大学</option>
-					<option value="西南交通大学">西南交通大学</option>
-					<option value="西南石油大学">西南石油大学</option>
-					<option value="成都理工大学">成都理工大学</option>
-					<option value="甘肃农业大学">甘肃农业大学</option>
-					<option value="兰州交通大学博文学院">兰州交通大学博文学院</option>
-					<option value="兰州理工大学技术工程学院">兰州理工大学技术工程学院</option>
-					<option value="武汉大学">武汉大学</option>
-					<option value="中国地质大学">中国地质大学</option>
-					<option value="中国矿业大学">中国矿业大学</option>
-					<option value="南京师范大学">南京师范大学</option>
-					<option value="南京信息工程大学">南京信息工程大学</option>
-					<option value="南京工业大学">南京工业大学</option>
-					<option value="华南师范大学">华南师范大学</option>
-					<option value="广东工业大学">广东工业大学</option>
-					<option value="广州大学">广州大学</option>
-					<option value="长安大学">长安大学</option>
-					<option value="西安科技大学">西安科技大学</option>
-					<option value="太原理工大学">太原理工大学</option>
-					<option value="山西工程技术学院">山西工程技术学院</option>
-					<option value="河南理工大学">河南理工大学</option>
-					<option value="黄河水利职业技术学院">黄河水利职业技术学院</option>
-					<option value="郑州水利水电大学">郑州水利水电大学</option>
+					
 				</select>
 			</li>
 			<li>
@@ -198,6 +154,7 @@
 		</ul>
 		<script type="text/javascript">
 			$(function() {
+				initOption();
 				$(':radio').click(function() {
 					var value = $(this).val() //获取选中的radio的值
 					if(value === "true") {
@@ -277,44 +234,22 @@
 					$("#telephone").val("");
 					$("#school").val("");
 				});
+				function initOption(){
+				$.get("data/school.json", function(result, textStatus, jqXHR) {
+					if(textStatus==="success"){
+						for(var i=0;i<result.length;i++){
+							$("<option/>").text(result[i].name).val(result[i].name).appendTo($("#address"));							
+						}
+						
+					}else{
+						alert("您访问的文件不存在");
+					}
+				})
+			}
 
 			})
 
-			//时间格式化函数
-			Date.prototype.Formate = function(fmt) {
-				var o = {
-					"M+": this.getMonth() + 1, //月份
-					"d+": this.getDate(), //日
-					"H+": this.getHours(), //小时
-					"m+": this.getMinutes(), //分
-					"s+": this.getSeconds(), //秒
-					"q+": Math.floor((this.getMonth() + 3) / 3), //季度
-					"S": this.getMilliseconds() //毫秒
-				};
-				if(/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-				for(var k in o)
-					if(new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-				return fmt;
-			};
-
-			function fileExist(url) {
-				var isExists;
-				$.ajax({
-					url: url,
-					async: false,
-					type: 'HEAD',
-					error: function() {
-						isExists = false;
-
-					},
-					success: function() {
-						isExists = true;
-
-					}
-				})
-				return isExists;
-
-			}
+			
 		</script>
 	</body>
 

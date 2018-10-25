@@ -1,1 +1,0 @@
-{"userName":"1","major":"11","school":"1","telephone":"1","onlineApply":"true","address":"黄河水利职业技术学院","time":"2018-09-08 22:20:23"}|
