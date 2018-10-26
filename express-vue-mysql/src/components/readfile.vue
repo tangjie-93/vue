@@ -7,56 +7,11 @@
 			<ul>
 				<li>
 					<select id="address" class="form-control">
-						<option value="sdkj">山东科技大学</option>
-						<option value="zgsyhb">中国石油大学（华东）</option>
-						<option value="zghy">中国海洋大学</option>
-						<option value="sdjz">山东建筑大学</option>
-						<option value="sdjt">山东交通大学</option>
-						<option value="tjcj">天津城建大学</option>
-						<option value="hblg">华北理工大学</option>
-						<option value="bjjz">北京建筑大学</option>
-						<option value="hbkj">华北科技学院</option>
-						<option value="hebgc">哈尔滨工程大学</option>
-						<option value="gldzkj">桂林电子科技大学</option>
-						<option value="guillg">桂林理工大学</option>
-						<option value="zn">中南大学</option>
-						<option value="cslg">长沙理工大学</option>
-						<option value="znlikj">中南林业科技大学</option>
-						<option value="hnkj">湖南科技大学</option>
-						<option value="dhlg">东华理工大学</option>
-						<option value="ncgc">南昌工程学院</option>
-						<option value="jxlg">江西理工大学</option>
-						<option value="gnsf">赣南师范大学</option>
-						<option value="kmlg">昆明理工大学</option>
-						<option value="xnly">西南林业大学</option>
-						<option value="guiz">贵州大学</option>
-						<option value="gzsf">贵州师范大学</option>
-						<option value="xnjt">西南交通大学</option>
-						<option value="xnsy">西南石油大学</option>
-						<option value="cdlg">成都理工大学</option>
-						<option value="gsny">甘肃农业大学</option>
-						<option value="lzjtbw">兰州交通大学博文学院</option>
-						<option value="lzlgjsgc">兰州理工大学技术工程学院</option>
-						<option value="wh">武汉大学</option>
-						<option value="zgdz">中国地质大学</option>
-						<option value="zgky">中国矿业大学</option>
-						<option value="njsf">南京师范大学</option>
-						<option value="njxxgc">南京信息工程大学</option>
-						<option value="njgy">南京工业大学</option>
-						<option value="hnsf">华南师范大学</option>
-						<option value="gdgy">广东工业大学</option>
-						<option value="gz">广州大学</option>
-						<option value="ca">长安大学</option>
-						<option value="sxkj">西安科技大学</option>
-						<option value="tylg">太原理工大学</option>
-						<option value="sxgnjs">山西工程技术学院</option>
-						<option value="hnlg">河南理工大学</option>
-						<option value="hhslzyjs">黄河水利职业技术学院</option>
-						<option value="zzslsd">郑州水利水电大学</option>
+						
 					</select>
 				</li>
 				<li>
-					<button class="btn" id="query">查询</button>
+					<button class="btn" id="query" @click="getData">查询</button>
 				</li>
 				<li>
 					<button class="btn" id="output">导出</button>
@@ -91,6 +46,7 @@
 					<td>操作</td>
 				</tr>
 			</thead>
+			<tbody></tbody>
 		</table>
 		<div class="page">
 			<select id="pageNumber" class="form-control">
@@ -144,8 +100,8 @@
 		},
 		methods: {
 			getData() {
-				this.userInfos=[];
-				$("#userInfos").children("tbody").remove();
+				
+				$("#userInfos>tbody").children().remove();
 				this.userInfos.splice(0, userInfos.length);
 				this.address = $("#address").val();
 				var data = {};
@@ -167,11 +123,12 @@
 				})
 			},
 			loadData(result) {
+				this.userInfos=[];
 				if(result.length == 0) {
 					alert("您读取的文件暂无数据");
 					$(".total").text("一共0条数据");
 					var tr = $("<tr><td colspan='8'>暂无数据</td></tr>")
-					$("#userInfos").append(tr);
+					$("#userInfos>tbody").append(tr);
 				} else if(result.length > 0) {
 
 					for(var i = 0; i < result.length; i++) {
@@ -208,36 +165,21 @@
 				$("#userInfos").append($tbody);
 				for(var j = startIndex; j < endIndex; j++) {
 					var userInfo = this.userInfos[j];
-					//console.log(userInfo);
 					var tr = $("<tr></tr>"); //$("<tr/>")
-					var td0 = $("<td></td>");
-					$(td0).text(j + 1);
-					var td1 = $("<td></td>");
-					$(td1).text(userInfo.userName);
-					var td2 = $("<td></td>");
-					$(td2).text(userInfo.major);
-					var td3 = $("<td></td>");
-					$(td3).text(userInfo.school);
-					var td4 = $("<td></td>");
-					$(td4).text(userInfo.telephone);
-					var td5 = $("<td></td>");
+					$("<td></td>").text(j + 1).appendTo($(tr));
+					$("<td></td>").text(userInfo.userName).appendTo($(tr));
+					$("<td></td>").text(userInfo.major).appendTo($(tr));
+					
+					$("<td></td>").text(userInfo.school).appendTo($(tr));
+					$("<td></td>").text(userInfo.telephone).appendTo($(tr));
 					var bool = userInfo.onlineApply === "on" ? "是" : "否";
-					$(td5).text(bool);
-					var td6 = $("<td></td>");
-					$(td6).text(userInfo.time);
+					$("<td></td>").text(bool).appendTo($(tr));
+					$("<td></td>").text(userInfo.time).appendTo($(tr));
 					var td7 = $("<td class='operate'></td>");
 					var delbtn = $("<button class='btn delete'>删除</button>");
 					var updbtn = $("<button class='btn update'>修改</button>");
-					$(td7).append(delbtn).append(updbtn);
-					$(tr).append(td0);
-					$(tr).append(td1);
-					$(tr).append(td2);
-					$(tr).append(td3);
-					$(tr).append(td4);
-					$(tr).append(td5);
-					$(tr).append(td6);
-					$(tr).append(td7);
-					$tbody.append(tr);
+					$("<td class='operate'></td>").append(delbtn).append(updbtn).appendTo($(tr));				
+					$("#userInfos").children("tbody").append(tr);
 				}
 				var $this=this;
 				$(".delete").click(function() {
@@ -337,7 +279,17 @@
 
 		},
 		mounted() {
-			this.getData();
+			var $this=this;
+			$.get("static/data/school.json", function(result, textStatus, jqXHR) {
+					if(textStatus === "success") {
+						for(var i = 0; i < result.length; i++) {
+							$("<option/>").text(result[i].name).val(result[i].name).appendTo($("#address"));
+						}
+					    $this.getData();
+					} else {
+						alert("您访问的文件不存在");
+					}
+				})
 		}
 
 	}

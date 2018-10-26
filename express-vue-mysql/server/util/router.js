@@ -104,8 +104,9 @@ router.use('/edit', function(req, res) {
 		}
 		res.end();
 	})
-	/*let querysql = "SELECT * FROM userinfo where userName='" + userInfo.userName + "'";
+	/*let querysql = "SELECT * FROM userinfo where userName='" + userInfo.userName + "'"+id!=;
 	new Promise(function(resolve, reject) {
+		//先判断数据库里是否存在同名
 		query(querysql, null, function(err, rows, fields) {
 			if(err) {
 				res.json({
@@ -160,8 +161,8 @@ router.use('/query', function(req, res) {
 	  let end = pageNumber*pageSize;*/
 	let start = 0;
 	let end = 100;
-	let userInfo = JSON.parse(req.body.data);
-	let sql = "SELECT * FROM userinfo where address="+userInfo.address+"ORDER BY Id DESC LIMIT " + start + "," + end;
+	let address =req.body.data;
+	let sql = "SELECT * FROM userinfo where address='"+address+"' ORDER BY Id DESC LIMIT " + start + "," + end;
 	let countSql = "SELECT COUNT(id) FROM userinfo";
 	const promise = new Promise(function(resolve, reject) {
 		query(countSql, null, function(err, rows, fields) {

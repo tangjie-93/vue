@@ -38,7 +38,7 @@
 			<li>
 				<span>宣讲地址:</span>
 				<select id="address" class="form-control">
-					<option value="山东科技大学">山东科技大学</option>
+					<!--<option value="山东科技大学">山东科技大学</option>
 					<option value="中国石油大学（华东）">中国石油大学（华东）</option>
 					<option value="中国海洋大学">中国海洋大学</option>
 					<option value="山东建筑大学">山东建筑大学</option>
@@ -84,7 +84,7 @@
 					<option value="河南理工大学">河南理工大学</option>
 					<option value="黄河水利职业技术学院">黄河水利职业技术学院</option>
 					<option value="郑州水利水电大学">郑州水利水电大学</option>
-				</select>
+-->				</select>
 			</li>
 			<li>
 				<button class="btn" id="reset" @click="reset">重置</button>
@@ -99,7 +99,8 @@
 	export default {
 		methods: {
 			send() {
-				var $this=this;
+				debugger;
+				var $this = this;
 				if($("#userName").val() === "") {
 					alert("姓名不可为空，请重新输入");
 					return;
@@ -131,30 +132,29 @@
 				data["time"] = time;
 				//alert(JSON.stringify(data));
 				data = JSON.stringify(data)
-				
 
 				$.post("api/add", {
 						data: data
 					}, function(result, textStatus, jqXHR) {
 						console.log(typeof result);
-						var bool=result.ok;
-						if(bool){
+						var bool = result.ok;
+						if(bool) {
 							alert(result.message);
 							if($("input[name='onlineApply']:checked").val() === "true") {
-									setTimeout(function() {
-										$this.$router.push("/ok")
-										document.title="我刚刚参加了【中海达宣讲会】"
-									}, 1000)
-								} else {
-									setTimeout(function() {
-										window.location.href = "http://zhaopin.hi-target.com.cn/";
-									}, 1000)
+								setTimeout(function() {
+									$this.$router.push("/ok")
+									document.title = "我刚刚参加了【中海达宣讲会】"
+								}, 1000)
+							} else {
+								setTimeout(function() {
+									window.location.href = "http://zhaopin.hi-target.com.cn/";
+								}, 1000)
 
-								}
-							
-						}else{
+							}
+
+						} else {
 							alert(result.message)
-						}						
+						}
 					}
 
 				)
@@ -166,6 +166,18 @@
 				$("#telephone").val("");
 				$("#school").val("");
 			}
+		},
+		mounted() {
+			$.get("static/data/school.json", function(result, textStatus, jqXHR) {
+				if(textStatus === "success") {
+					for(var i = 0; i < result.length; i++) {
+						$("<option/>").text(result[i].name).val(result[i].name).appendTo($("#address"));
+					}
+
+				} else {
+					alert("您访问的文件不存在");
+				}
+			})
 		}
 	}
 </script>
