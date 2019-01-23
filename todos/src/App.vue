@@ -256,6 +256,10 @@ footer button{
 	box-shadow: none;
 	line-height: 1;
 	font-size: 1em;
+	outline: none;
+    border: none;
+    padding: 4px;
+    background: deepskyblue;
 }
 footer button:focus{
 	outline: none;
