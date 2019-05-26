@@ -1,12 +1,22 @@
 <template>
   <div id="parent">
-    <div id="dialog-wrapper" ref="dialog-wrapper" @click.prevent="closeDialog">
-      <div class="dialog" :style="styleProps" ref="dialog" id="dialog">
+    <div  id="dialog-wrapper" ref="dialog-wrapper" @click.prevent="closeDialog">
+      <div class="dialog-cover" :style="{opacity:opacity}"></div>
+      <div v-if="dialogModel" v-drag class="dialog" :style="styleProps" ref="dialog" id="dialog">
         <div class="dialog-header">
           <span class="dialog-title">{{dialogTitle}}</span>
           <span class="dialog-btn-close" v-show="showBtnClose" @click="hide">X</span>
         </div>
-        <div  class="dialog-content"> 
+        <div class="dialog-content">
+          <slot></slot>
+        </div>
+      </div>
+      <div v-else class="dialog" :style="styleProps" ref="dialog" id="dialog">
+        <div class="dialog-header">
+          <span class="dialog-title">{{dialogTitle}}</span>
+          <span class="dialog-btn-close" v-show="showBtnClose" @click="hide">X</span>
+        </div>
+        <div class="dialog-content">
           <slot></slot>
         </div>
       </div>
@@ -15,7 +25,7 @@
 </template>
 
 <script>
-import funDrag from "@/util/drag";
+import drag from "@/util/drag"
 export default {
   name: "theDialog",
   props: {
@@ -43,25 +53,28 @@ export default {
     dialogModel: {
       type: Boolean,
       default: false
+    },
+    opacity: {
+      type: Number,
+      default: 0.5
     }
   },
   data() {
     return {
-      showFlag: false,
-      b: 1,
-      styleProps: {}
     };
   },
-  created() {
-    this.showFlag = this.isShow;
-    this.styleProps = this.styleObj;
-    this.calculatePosition();
+  created(){
+      console.log(drag);
   },
-  mounted() {
-    var dragDom = document.getElementById("dialog");
-    var parentDom = document.getElementById("dialog-wrapper");
-
-    funDrag(dragDom, parentDom);
+  directives: {
+    drag
+  },
+  computed: {
+    styleProps(vm) {
+      if (vm.isShow) {
+        return vm.calculatePosition();
+      }
+    }
   },
   methods: {
     hide() {
@@ -76,11 +89,8 @@ export default {
       }
     },
     calculatePosition() {
-      for (var type in this.styleProps) {
-        console.log(type);
-        debugger
+      for (var type in this.styleObj) {
         if (type === "width" || type === "height") {
-          debugger;
           let val = this.styleObj[type];
           let winWidth = window.innerWidth;
           let winHeight = window.innerHeight;
@@ -89,7 +99,7 @@ export default {
               let dialogWidth = parseInt(val);
               if (dialogWidth && dialogWidth >= 0) {
                 if (val.includes("%")) {
-                  this.styleObj["left"] = (100 - parseInt(val))/2 + "%";
+                  this.styleObj["left"] = (100 - parseInt(val)) / 2 + "%";
                 }
                 if (val.includes("px") || /^\d+$/.test(val)) {
                   if (dialogWidth < winWidth) {
@@ -102,11 +112,11 @@ export default {
               let dialogHeight = parseInt(val);
               if (dialogHeight && dialogHeight >= 0) {
                 if (val.includes("%")) {
-                  this.styleObj["top"] = (100 - parseInt(val))/2 + "%";
+                  this.styleObj["top"] = (100 - parseInt(val)) / 2 + "%";
                 }
                 if (val.includes("px") || /^\d+$/.test(val)) {
-                  if (dialogWidth < winWidth) {
-                    this.styleObj["top"] = (winWidth - dialogWidth) / 2 + "px";
+                  if (dialogWidth < winHeight) {
+                    this.styleObj["top"] = (winHeight - dialogWidth) / 2 + "px";
                   }
                 }
               }
@@ -116,6 +126,7 @@ export default {
           }
         }
       }
+      return this.styleObj;
     }
   }
 };
@@ -126,29 +137,35 @@ export default {
   width: 100%;
   height: 100%;
 }
+.dialog-cover {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: black;
+}
 .dialog {
-  position: fixed;
-  width: 200px;
-  height: 200px;
-  margin: 0 auto;
-  background: red;
+  position: absolute;
   cursor: move;
-  pointer-events: auto;
+  /* margin: 0 auto;
+  pointer-events: auto; */
 }
 .dialog-header {
   background: lightgray;
   text-align: left;
   padding: 5px;
+  font-weight: bolder;
 }
 
 .dialog-btn-close {
   float: right;
+  padding: 0 10px;
+  cursor: pointer;
 }
-.dialog-content{
-    padding: 0;
-    position: relative;
-    height: calc(100% - 30px);
-    overflow-y: auto;
-    margin: 0;
+.dialog-content {
+  padding: 0;
+  position: relative;
+  height: calc(100% - 30px);
+  overflow-y: auto;
+  margin: 0;
 }
 </style>
