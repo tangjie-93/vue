@@ -1,6 +1,6 @@
 # culculator
 
-> A Vue.js project
+> A Vue.js project，一个计算器的demo
 
 ## Build Setup
 
