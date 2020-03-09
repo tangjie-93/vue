@@ -1,6 +1,6 @@
 # communicate
 
-> A Vue.js project
+> A Vue.js project  一个嵌套路由的例子。动画效果采用的是`animate.css`。
 
 ## Build Setup
 
