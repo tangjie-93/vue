@@ -1,6 +1,6 @@
 # express-vue-mysql
 
-> A Vue.js project
+> A Vue.js project 前端框架使用vue，后台用的是node.js的express框架，数据库用的是mysql。该项目用于收集签到信息，并将收集到的签到信息用表格展示出来，并提供了查询条件。同时可以将数据导出到本地进行统计分析。
 
 ## Build Setup
 
