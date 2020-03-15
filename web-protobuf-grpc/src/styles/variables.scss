@@ -1,0 +1,85 @@
+// sidebar
+$menuText:#bfcbd9;
+$menuActiveText:#409EFF;
+$subMenuActiveText:#f4f4f5; //https://github.com/ElemeFE/element/issues/12951
+
+$menuBg:#304156;
+$menuHover:#263445;
+
+$subMenuBg:#1f2d3d;
+$subMenuHover:#001528;
+
+$sideBarWidth: 210px;
+
+// the :export directive is the magic sauce for webpack
+// https://www.bluematador.com/blog/how-to-share-variables-between-js-and-sass
+// :export {
+//   menuText: $menuText;
+//   menuActiveText: $menuActiveText;
+//   subMenuActiveText: $subMenuActiveText;
+//   menuBg: $menuBg;
+//   menuHover: $menuHover;
+//   subMenuBg: $subMenuBg;
+//   subMenuHover: $subMenuHover;
+//   sideBarWidth: $sideBarWidth;
+// }
+
+
+//颜色
+$bgColor:#0A0E28;
+$themeColor: #1B2A7F;
+$gray:#EDEDED;
+$fontColor:#5B5D61;
+$borderColor:#E4E7ED;
+
+// navbar
+$menuText: #fff;
+$menuActiveText: #fff;
+$subMenuActiveText: #f4f4f5; //https://github.com/ElemeFE/element/issues/12951
+
+// $menuBg: $themeColor;
+$menuHover: #0a0e2880;
+$menuActive: #0a0e28;
+
+$subMenuBg: #1f2d3d;
+$subMenuHover: #001528;
+
+$navBarHeight: 50px;
+
+// tagView
+$tagsViewHeight:54px;
+
+$containerPadding:15px;
+
+// 设备统计
+$headerHeight: 60px;
+$titleHeight: 25PX;
+$titleWidth: 424px;
+$titleColor: #fff;
+$borderLeft: 5px solid #0f68ce;
+$startColor: #0c294b;
+$endColor: #0b141f2e;
+$chartBackgroundColor: #0c1929;
+
+//间隔
+$pd:10px;
+
+
+//基础字体大小
+$baseText:14px;
+$textPingFang:PingFangSC-Medium,
+PingFang SC;
+$baseTextPingFang:PingFangSC-Regular,
+PingFang SC;
+
+// the :export directive is the magic sauce for webpack
+// https://www.bluematador.com/blog/how-to-share-variables-between-js-and-sass
+:export {
+  menuText: $menuText;
+  menuActiveText: $menuActiveText;
+  subMenuActiveText: $subMenuActiveText;
+  menuBg: $menuBg;
+  menuHover: $menuHover;
+  subMenuBg: $subMenuBg;
+  subMenuHover: $subMenuHover;
+}

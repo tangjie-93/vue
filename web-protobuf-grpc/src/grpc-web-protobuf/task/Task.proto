@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+
+package com.bzl.bis.task;
+
+import public "google/protobuf/timestamp.proto";
+
+service TaskService {
+  rpc addTask (TaskDTO) returns (CommonResult); // 新增
+  rpc listTask (ListTaskReq) returns (ListTaskResp); // 分页列表
+  rpc modifyTask (TaskDTO) returns (CommonResult); // 修改
+  rpc getTaskDetailById (GetTaskDetailByIdReq) returns (GetTaskDetailByIdResp); //按主键获取任务详情
+  rpc deleteTask (DeleteTaskIdReq) returns (CommonResult); //按主键删除
+}
+
+// 设备
+message TaskDTO {
+  int64 id = 1;  //任务Id
+  string task_type = 2;  //任务类型
+  string title = 3; // 任务名称
+  int64 robot_id = 4; //机器Id
+  int64 mission_id = 5;  //作业Id
+  google.protobuf.Timestamp start_time = 6; // 作业开始时间
+  google.protobuf.Timestamp end_time = 7; // 作业结束时间
+  string state = 8; // 状态
+  string created_by = 9; // 创建人Id
+  google.protobuf.Timestamp created_time = 10; // 创建时间
+  string updated_by = 11; // 修改人
+  google.protobuf.Timestamp updated_time = 12; // 修改时间
+}
+
+message ListTaskReq {
+    uint64 page_no = 1; // 请求页码
+    uint64 page_size = 2; // 请求分页大小
+    string task_type = 3;  //任务类型
+    int64 robot_id = 4; //机器Id
+    string state = 5; // 状态
+}
+
+message ListTaskResp {
+    // 公共响应代码和信息
+    CommonResult common_result = 1;
+    // 分页信息
+    PageData page_data = 2;
+    // 分页结果列表
+    repeated TaskDTO rows = 3;
+}
+
+message GetTaskDetailByIdReq {
+  int64 id = 1;
+}
+
+message GetTaskDetailByIdResp {
+    // 公共响应代码和信息
+    CommonResult common_result = 1;
+    TaskDTO task = 2;
+}
+
+message DeleteTaskIdReq {
+  int64 id = 1;
+}
+
+//通用返回结果
+message CommonResult {
+  int32 code = 1; //返回编码
+  string msg = 2; //提示消息
+}
+
+// 分页信息
+message PageData {
+    uint64 page_no = 1;                                         // 当前页码
+    uint64 page_size = 2;                                       // 页面大小
+    uint64 total = 3;                                              // 总页码
+}

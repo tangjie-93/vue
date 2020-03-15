@@ -1,0 +1,15 @@
+{
+  "name": "plugin-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "pluginTest.js",
+  "dependencies": {
+    "webpack": "^4.29.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

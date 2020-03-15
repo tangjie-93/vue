@@ -1,0 +1,129 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.bzl.grpc.service.device"; //com.bzl.grpc.service + 文件名
+
+import "message/Base.proto";
+import "common/CommonResult.proto";
+import public "google/protobuf/timestamp.proto";
+import "google/protobuf/wrappers.proto";
+service DeviceServer {
+
+    //新增机器人
+    rpc addDevice (Device) returns (CommonResult) {
+    }
+
+    //更新机器人
+    rpc updateDevice (Device) returns (CommonResult) {
+    }
+
+    //删除机器人(逻辑删除)
+    rpc deleteDevice (Device) returns (CommonResult) {
+    }
+
+    //分页查询机器人
+    rpc queryDevice (DevicePageQuery) returns (DeviceListResponse) {
+    }
+
+    //根据编号查询特定的机器人
+    rpc queryDeviceBySn (QueryDeviceBySnRequest) returns (DeviceResponse) {
+    }
+
+    //批量删除机器人(逻辑删除)
+    rpc deleteDevices (DeleteDeviceRequest) returns (CommonResult) {
+    }
+}
+
+message Device {
+    //主键id
+    google.protobuf.UInt64Value id = 1;
+    //设备类型
+    DeviceType type = 2;
+    //设备编号
+    string sn = 3;
+    //设备名称
+    string name = 4;
+    // 状态
+    string status = 5;
+    //设备总运行时长
+    google.protobuf.UInt64Value total_duration = 6;
+    //设备开始运行时间
+    google.protobuf.Timestamp start_time = 7;
+    //设备长度
+    google.protobuf.UInt64Value length = 8;
+    //设备宽度
+    google.protobuf.UInt64Value width = 9;
+    //电量不足阈值
+    google.protobuf.UInt64Value energy_level_critical = 10;
+    //良好电量阈值
+    google.protobuf.UInt64Value energy_level_good = 11;
+    //满电阈值
+    google.protobuf.UInt64Value energy_level_full = 12;
+    //建议充电阈值
+    google.protobuf.UInt64Value energy_level_stuff = 13;
+    //最大正向速度
+    google.protobuf.UInt64Value max_velocity = 14;
+    //最大反向速度
+    google.protobuf.UInt64Value max_reverse_velocity = 15;
+    //能处理的订单类型
+    string processable_categories = 16;
+    //创建人
+    string created_by = 17;
+    //创建时间
+    google.protobuf.Timestamp created_time = 18;
+    //更新人
+    string updated_by = 19;
+    //更新时间
+    google.protobuf.Timestamp updated_time = 20;
+    //运行状态
+    string proc_state = 21;
+    //生产日期
+    google.protobuf.Timestamp production_date = 22;
+}
+
+message DeviceResponse {
+    CommonResult common_result = 1;
+    Device data = 2;
+}
+
+message DeviceType{
+    // 类型编码
+    string code = 1;
+    // 类型名称
+    string name = 2;
+
+
+}
+message DevicePageQuery {
+    // 请求页码
+    google.protobuf.UInt64Value page_no = 1;
+    // 请求分页大小
+    google.protobuf.UInt64Value page_size = 2;
+    // 类型编码
+    string type_code = 3;
+    // 类型名称
+    string name = 4;
+    //设备编码
+    string sn = 5;
+    //设备状态
+    string status = 6;
+    // 能处理的订单类型
+    string processable_categories = 7;
+}
+
+message QueryDeviceBySnRequest{
+    string sn = 1;
+}
+message DeviceListResponse {
+    // 公共响应代码和信息
+    CommonResult common_result = 1;
+    // 分页信息
+    PageData page_data = 2;
+    // 分页结果列表
+    repeated Device rows = 3;
+}
+
+message DeleteDeviceRequest{
+    //机器人id数组
+    repeated google.protobuf.UInt64Value id = 1;
+}

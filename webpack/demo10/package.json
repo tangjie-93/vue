@@ -1,0 +1,17 @@
+{
+  "name": "demo10",
+  "version": "1.0.0",
+  "description": "typescript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "tangjie",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/lodash": "^4.14.121",
+    "html-webpack-plugin": "^3.2.0",
+    "ts-loader": "^5.3.3",
+    "typescript": "^3.3.3333"
+  }
+}
