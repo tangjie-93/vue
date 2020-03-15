@@ -1,7 +1,7 @@
 <template>
 	<div class="container">
-		<div class="leftContent">
-			<leftView/>
+		<div class="leftContent" ref="test">
+			<leftView ref="test1"/>
 		</div>
 
 		<div class="rightContent">
@@ -24,6 +24,11 @@
 		},
 		components: {
           leftView
+		},
+		mounted () {
+			console.log(this.$refs.test)	
+			console.log(this.$refs.test1)
+			console.log(this.$el);	
 		},
 		computed:{
 			 key() {
