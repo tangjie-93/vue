@@ -1,0 +1,13 @@
+import Vue from 'vue'
+import App from './App.vue'
+import store from './store'
+import _ from 'lodash'
+import './assets/index.css'
+import VueWorker from 'vue-worker'
+Vue.use(VueWorker)
+Vue.config.productionTip = false
+Vue.prototype.$lodash = _
+new Vue({
+  store,
+  render: h => h(App)
+}).$mount('#app')
