@@ -48,36 +48,4 @@ export default class BaseChart {
             }
          }
     }
-    getSeriesData (title, type, data) {
-        return this.createSeriesData(title, type, data)
-    }
-    getyAxiosData () {
-        return {
-            type: 'value',
-            splitLine: { show: false },
-            // max: 700,
-            splitNumber: 3,
-            axisTick: { show: false },
-            axisLine: {
-                lineStyle: {
-                    color: '#8FA3B7' // y轴颜色
-                }
-            },
-            axisLabel: {
-                show: true,
-                textStyle: {
-                    color: '#6D6D6D'
-                }
-            }
-         }
-    }
-    getxAxiosData (data) {
-       return this.createXAxiosData(data)
-    }
-    getLineXAxiosData (data) {
-        return this.createXAxiosData(data)
-    }
-    getLineYAxisData () {
-        return this.createYAxiosData();
-    }
 }

@@ -1,7 +1,7 @@
 export default {
   state: {
     echartCount: 0,
-    gridItemCount: undefined,
+    gridItemCount: 0,
     isEcahrtAllMounted: false,
     chartInstanceObj: {},
     layouts: null,
@@ -43,19 +43,27 @@ export default {
         curIndex > -1 && visibleChartInstanceArr.splice(curIndex, 1)
       }
     },
-    storeLayouts (state, layouts) {
-      state.layouts = layouts
+    clearAllVisibleChartInstance (state) {
+        state.visibleChartInstanceArr = []
     },
     getGraphItemCount (state, count) {
       state.gridItemCount = count;
     },
     statCountofchartMounted (state) {
         state.echartCount += 1
-        state.echartCount === state.gridItemCount && (state.isEcahrtAllMounted = true)
+        if (state.echartCount === state.gridItemCount) {
+          state.isEcahrtAllMounted = true
+        } 
     },
-    UpdateStatusOfEcahrtAllMounted (state) {
-        state.isEcahrtAllMounted = false
-    }
+    restoreCardState (state) {
+      state.echartCount = 0;
+      state.gridItemCount = 0;
+      state.isEcahrtAllMounted = false;
+      state.chartInstanceObj = {};
+      // 当前视图内可见图表
+      state.visibleChartInstanceArr = [];
+      state.isresize = false;// 是否调用了resize
+  }
   },
   actions: {
     resizeChart ({ commit }, index) {

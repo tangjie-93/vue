@@ -12,16 +12,16 @@ module.exports = {
       .set('@', resolve('src')) // key,value自行定义，比如.set('@@', resolve('src/components'))
       .set('_c', resolve('src/components'))
     config.output.globalObject('this')
-    // config.module
-    //   .rule('css')
-    //   .test(/\.css$/)
-    //   .oneOf('vue')
-    //   .resourceQuery(/\?vue/)
-    //   .use('px2rem')
-    //   .loader('px2rem-loader')
-    //   .options({
-    //     remUnit: 16
-    //   })
+    config.module
+      .rule('css')
+      .test(/\.css$/)
+      .oneOf('vue')
+      .resourceQuery(/\?vue/)
+      .use('px2rem')
+      .loader('px2rem-loader')
+      .options({
+        remUnit: 19.2
+      })
   },
   configureWebpack: config => {
     config.module.rules.push({
@@ -47,14 +47,17 @@ module.exports = {
   },
   css: {
     loaderOptions: {
-      // postcss: {
-      //   plugins: [
-      //     px2rem({
-      //       // 基准大小 baseSize，需要和rem.js中相同
-      //       remUnit: 16// config.rootFontSize
-      //     })
-      //   ]
-      // },
+      postcss: {
+        plugins: [
+          require('postcss-pxtorem')({
+            rootValue: 19.2, // 换算的基数
+            propList: ['*']
+          })
+        ]
+      },
+        less: {
+          javascriptEnabled: true
+        }
     //   sass: {
     //     prependData: `
     //       @import "@/assets/css/variable.scss";

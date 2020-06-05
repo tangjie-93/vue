@@ -12,22 +12,8 @@ export default class BarChart extends BaseChart {
             seriesData.push(data[key]);
         })
         let option = {
-            title: {
-                text: title,
-                x: 'center'
-            },
             tooltip: {
                 trigger: 'axis'
-                // formatter: (params) => {
-                //     // console.log(params)
-                //     let str = params[0].axisValue + '<br>' + params[0].seriesName + '：' + params[0].value + '<br>';
-                //     params[0].data.metricData.forEach(item => {
-                //         Object.keys(item).forEach(key => {
-                //             str += key + '：' + this.formatterMetricValue(item[key]) + '<br>';
-                //         })
-                //     })
-                //     return str;
-                // }
             },
             grid: {
                 left: '3%',
@@ -35,9 +21,9 @@ export default class BarChart extends BaseChart {
                 bottom: '5%',
                 containLabel: true
             },
-            xAxis: super.createXAxiosData(xAxisData),
-            yAxis: super.createYAxiosData(),
-            series: super.createSeriesData(title, 'bar', seriesData)
+            xAxis: this.createXAxiosData(xAxisData),
+            yAxis: this.createYAxiosData(),
+            series: this.createSeriesData(title, 'bar', seriesData)
         }
         return option
     }

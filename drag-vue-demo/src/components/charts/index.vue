@@ -8,6 +8,7 @@
 <script>
 import echarts from 'echarts'
 import tdTheme from './theme.json'
+import evenBus from '../../libs/evenBus'
 echarts.registerTheme('tdTheme', tdTheme)
 export default {
   name: 'Chart',
@@ -48,8 +49,7 @@ export default {
           this.dom.showLoading({ text: '数据正在加载中' })
            this.index && this.$store.commit('addChartInstance', { index: this.index, chart: this.dom, option: this.optionData })
            if (this.isEcahrtAllMounted) {
-            this.$emit('gridItemAllMounted')
-            this.$store.commit('UpdateStatusOfEcahrtAllMounted')
+            evenBus.$emit('gridItemAllMounted')
           }
         }
       }, 10)

@@ -15,15 +15,12 @@ export default class LineChart extends BaseChart {
          })
          super.createXAxiosData(xAxisData)
         let option = {
-            title: {
-                text: title,
-                x: 'center'
-            },
             tooltip: {
                 trigger: 'axis'
                 // formatter: "{b} <br> 合格率: {c}%"
             },
             grid: {
+                top: 10,
                 left: '3%',
                 right: '4%',
                 bottom: '3%',
