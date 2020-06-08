@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <div id="app">
+    <!-- <p>{{counter}}</p> -->
+    <p>{{arr}}</p>
+
+    <button @click="add">递增</button>
+    <button @click="change">修改</button>
+  </div>
+
+  <script src="./kvue.js"></script>
+
+  <script>
+    const app = new KVue({
+      el:'#app',
+      data: {
+        // counter: 1,
+        arr:[1,2,3]
+      },
+      methods: {
+        add(){
+          const len=this.arr.length;
+          this.arr.push(len+1);
+          // this.counter++;
+        },
+        change(){
+          this.arr.splice(0,1,4)
+        }
+      },
+    })
+    // setInterval(() => {
+    //   app.counter++
+    // }, 1000);
+    
+  </script>
+</body>
+</html>
