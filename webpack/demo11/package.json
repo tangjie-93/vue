@@ -4,7 +4,7 @@
   "description": "webpack-library",
   "main": "dist/webpack-numbers.js",
   "dependencies": {
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.19",
     "webpack-library-example": "^0.1.5"
   },
   "devDependencies": {
