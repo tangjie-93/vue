@@ -1,0 +1,28 @@
+{
+  "name": "tj",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "tj",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "tj": "./bin/tj",
+    "tkj-cli": "./bin/tj"
+  },
+  "keywords": [],
+  "author": "“tangjie (https://github.com/tangjie-93)",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "chalk": "^4.1.0",
+    "commander": "^6.0.0",
+    "download-git-repo": "^3.0.2",
+    "fs-extra": "^9.0.1",
+    "inquire": "^0.4.8",
+    "inquirer": "^7.3.3",
+    "ora": "^5.0.0",
+    "zhufeng-cli": "^1.0.0"
+  }
+}

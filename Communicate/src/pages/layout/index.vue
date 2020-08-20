@@ -6,7 +6,7 @@
 
 		<div class="rightContent">
 			<transition leave-active-class="bounceOutLeft" enter-active-class="bounceInRight">
-			<keep-alive><router-view class="animated"></router-view></keep-alive>
+			   <keep-alive><router-view class="animated"></router-view></keep-alive>
 		</transition>
 		</div>
 
