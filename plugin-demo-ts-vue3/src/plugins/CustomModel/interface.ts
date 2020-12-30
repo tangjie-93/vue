@@ -1,4 +1,5 @@
 export interface ModelOption{
+    closeFromWindowClick?:boolean,
     title?: string;
     content?: string;
     okText?: string;

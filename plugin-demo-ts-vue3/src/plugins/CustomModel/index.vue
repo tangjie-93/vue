@@ -1,17 +1,17 @@
 <template>
-    <div v-if="visible" class="model-container" ref="model">
-      <div class="custom-confirm">
-        <div class="custom-confirm-header">{{ title }}</div>
-        <div class="custom-confirm-body" v-html="content"></div>
-        <div class="custom-confirm-footer">
-          <button @click="handleOk">{{ okText }}</button>
-          <button @click="handleCancel">{{ cancelText }}</button>
-        </div>
+  <div class="model-container" ref="modal">
+    <div class="custom-confirm">
+      <div class="custom-confirm-header">{{ title }}</div>
+      <div class="custom-confirm-body" v-html="content"></div>
+      <div class="custom-confirm-footer">
+        <button @click.prevent.stop="handleOk">{{ okText }}</button>
+        <button @click.prevent.stop="handleCancel">{{ cancelText }}</button>
       </div>
     </div>
+  </div>
 </template>
 <script lang="ts">
-import { defineComponent, reactive,toRefs} from "vue";
+import { defineComponent, onBeforeUnmount, onMounted, reactive, ref, toRefs } from "vue";
 export default defineComponent({
   name: "ElMessage",
   props: {
@@ -36,30 +36,37 @@ export default defineComponent({
     },
     cancel: {
       type: Function,
-	},
-	visible:{
-		type:Boolean,
-		default:false
-	}
+    },
+    closeFromWindowClick:{
+      type:Boolean,
+      default:true
+    }
   },
   setup(props) {
-    const state = reactive({
-    visible: props.visible,
-	});
-    function handleCancel() {
-		state.visible = false;
-		props.cancel && props.cancel();
-		
+    const modal=ref(null);
+    function removeModal(){
+      modal.value&&document.body.removeChild((modal.value! as any).parentNode);
+    }
+     function handleCancel() {
+      removeModal();
+      props.cancel && props.cancel();
     }
     function handleOk() {
-		state.visible = false;
-		props.ok && props.ok();
-		
-	}
+      removeModal();
+      props.ok && props.ok();
+    }
+    onMounted(()=>{
+     props.closeFromWindowClick&&window.addEventListener('click',removeModal)
+    })
+    onBeforeUnmount(()=>{
+      props.closeFromWindowClick&&window.removeEventListener('click',removeModal)
+    })
+    
+   
     return {
-		...toRefs(state),
-		handleOk,
-		handleCancel,
+      modal,
+      handleOk,
+      handleCancel,
     };
   },
 });

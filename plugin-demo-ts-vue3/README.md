@@ -1,24 +1,106 @@
-# demots
+&#8195;&#8195;最近公司有一个新的项目，项目框架是我来负责搭建的，所以果断选择了`Vue3.x+ts`。`vue3.x`不同于`vue2.x`，他们两的插件封装方式完全不一样。由于项目中需要用到自定义提示框,所以想着自己封装一个。`vue2.x`提供了一个`vue.extend`的全局方法。那么`vue3.x`是不是也会提供什么方法呢?果然从`vue3.x`源码中还是找到了。插件封装的方法，还是分为两步。
+## 1、组件准备
+&#8195;&#8195;按照`vue3.x`的组件风格封装一个自定义提示框组件。在`props`属性中定义好。需要传入的数据流。
+```html
+<template>
+    <div v-show="visible" class="model-container">
+      <div class="custom-confirm">
+        <div class="custom-confirm-header">{{ title }}</div>
+        <div class="custom-confirm-body" v-html="content"></div>
+        <div class="custom-confirm-footer">
+            <button @click.prevent.stop="handleOk">{{ okText }}</button>
+            <button @click.prevent.stop="handleCancel">{{ cancelText }}</button>
+        </div>
+      </div>
+    </div>
+</template>
+```
+```ts
+<script lang="ts">
+import { defineComponent, watch, reactive, onMounted, onUnmounted, toRefs } from "vue";
+export default defineComponent({
+  name: "ElMessage",
+  props: {
+    title: {
+      type: String,
+      default: "",
+    },
+    content: {
+      type: String,
+      default: "",
+    },
+    okText: {
+      type: String,
+      default: "确定",
+    },
+    cancelText: {
+      type: String,
+      default: "取消",
+    },
+    ok: {
+      type: Function,
+    },
+    cancel: {
+      type: Function,
+    },
+     closeFromWindowClick:{
+      type:Boolean,
+      default:true
+    }
+  },
+  setup(props) {
+    const modal=ref(null);
+    function removeModal(){
+      modal.value&&document.body.removeChild((modal.value! as any).parentNode);
+    }
+     function handleCancel() {
+      removeModal();
+      props.cancel && props.cancel();
+    }
+    function handleOk() {
+      removeModal();
+      props.ok && props.ok();
+    }
+    onMounted(()=>{
+        props.closeFromWindowClick&&window.addEventListener('click',removeModal)
+    })
+    onBeforeUnmount(()=>{
+        props.closeFromWindowClick&&window.removeEventListener('click',removeModal)
+    })
+    return {
+      modal,
+      handleOk,
+      handleCancel,
+    };
+  },
+});
+</script>
+```
+## 2、插件注册
+&#8195;&#8195;这个才是插件封装的重点。不过代码量非常少，只有那么核心的几行。主要是调用了`vue3.x`中的`createVNode`创建虚拟节点，然后调用`render`方法将虚拟节点渲染成真实节点。并挂在到真实节点上。本质上就是`vue3.x`源码中的`mount`操作。
+```js
+import { createVNode, render } from 'vue';
+import type {App} from "vue";
+import MessageConstructor from './index.vue'
+const Message: any= function(options:any){
+    const container = document.createElement('div')
+    //创建虚拟节点
+    const vm = createVNode(
+      MessageConstructor,
+      options,
+    )
+    //渲染虚拟节点
+    render(vm, container)
+    document.body.appendChild(container);
+}  
+export default {
+    //组件祖册
+    install(app: App): void {
+        app.config.globalProperties.$message = Message
+    }
+}
+```
 
-## Project setup
-```
-npm install
-```
+&#8195;&#8195;[插件封装完整地址](https://github.com/tangjie-93/vue/tree/master/plugin-demo-ts-vue3)。**源码位置————`packages/runtime-core/src/apiCreateApp`中的`createAppAPI`函数中的`mount`方法。**
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
-
-### Compiles and minifies for production
-```
-npm run build
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+![](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0c05d90dafbd437c82ee03a0b012c8f4~tplv-k3u1fbpfcp-watermark.image)![](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/888fb7ccc6db447a9b88b2c70cac1c45~tplv-k3u1fbpfcp-watermark.image)

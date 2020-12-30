@@ -1,5 +1,5 @@
 <template>
-	<button @click="change">count is: {{ count }}</button>
+	<button @click.prevent.stop="change">count is: {{ count }}</button>
 	<p>{{name}}</p>
 </template>
 
