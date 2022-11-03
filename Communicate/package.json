@@ -38,7 +38,7 @@
     "friendly-errors-webpack-plugin": "^1.6.1",
     "grunt": "^1.0.3",
     "grunt-contrib-concat": "~0.1.1",
-    "grunt-contrib-jshint": "~0.1.1",
+    "grunt-contrib-jshint": "~3.2.0",
     "grunt-contrib-uglify": "~0.1.2",
     "grunt-svgstore": "^2.0.0",
     "html-webpack-plugin": "^2.30.1",
