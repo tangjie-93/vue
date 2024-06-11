@@ -21,13 +21,14 @@ arrayMethods.forEach(method=>{
 
   def(arrayMethods, method, function() {
     var args = [], len = arguments.length;
-    while ( len-- ) args[ len ] = arguments[ len ];
+    while ( len-- ) 
+    {
+      args[ len ] = arguments[ len ]
+    };
     var result = original.apply(this, args);
     var ob = this.__ob__;
     var inserted;
-    console.log(method)
     switch (method) {
-     
       case 'push':
       case 'unshift':
         inserted = args;
