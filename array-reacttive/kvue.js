@@ -19,7 +19,7 @@ arrayMethods.forEach(method=>{
 //  }
   const original = arrayProto[method];
 
-  def(arrayMethods, method, function() {
+  def(arrayProto, method, function() {
     var args = [], len = arguments.length;
     while ( len-- ) 
     {
